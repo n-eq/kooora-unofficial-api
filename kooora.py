@@ -19,14 +19,8 @@ class Kooora:
         print("TODO")
 
     def search(self, keyword, *search_types):
-#         search_types = types
-#         if search_types == []:
-#             search_types = [s for s in SearchType]
         req = KAPI_BASE_URL + "/search?keyWord=%s" % keyword
-#         print("Seatchtypes : ", search_types)
-#         print("type: ", type(search_types))
         for t in search_types:
-            print(t)
             req += "&type=%d" % t.value
         j = requests.get(req).json()
 

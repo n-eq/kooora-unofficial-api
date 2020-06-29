@@ -381,7 +381,6 @@ class League:
 
     def get_matches(self, date = 'null', by_stage = True):
         req = KAPI_BASE_URL + "/LeagueMatches/%d/?date=%s&bystage=%s" % (self.id, date, "true" if by_stage else "false")
-
         r = requests.get(req).json()
 
         # For League matches, the resulting json is structured as follows
@@ -394,6 +393,15 @@ class League:
                 for match in stage['Matches']:
                     m = Match.from_json_search(match)
                     res.append(m)
+        return res
+
+    def get_table(self):
+        req = KAPI_BASE_URL + "/LeagueTable/%d" % self.id
+        r = requests.get(req).json()
+
+        res = []
+        for elt in r['Entries']:
+            res.append(elt)
         return res
 
     def to_dict(self):

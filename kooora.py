@@ -404,6 +404,15 @@ class League:
             res.append(elt)
         return res
 
+     def get_top_scorers(self):
+        req = KAPI_BASE_URL + "/scorers/%d" % self.id
+        r = requests.get(req).json()
+
+        res = []
+        for elt in r['Scorers']:
+            res.append({'goals': elt['Goals'], 'player': Player.from_search_json(elt['Player'])})
+        return res
+
     def to_dict(self):
         return {
             'id': self.id,

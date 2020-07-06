@@ -1,10 +1,9 @@
 from enum import Enum
 
 import requests
-import json
 from datetime import datetime
 
-from utils import *
+from utils import get_tz, KAPI_BASE_URL
 
 class SearchType(Enum):
     TOURNAMENT = 0
@@ -375,6 +374,15 @@ class League:
         l.sport = j['Sport']
 
         return l
+
+    def get_title(self):
+        return self.title
+
+    def get_years(self):
+        return self.years
+
+    def get_sport(self):
+        return self.sport
 
     @staticmethod
     def from_id(id):

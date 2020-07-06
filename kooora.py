@@ -266,8 +266,11 @@ class Team:
         t = Team(j['Id'], j['Name'], j['Country']['Value'], j['Sport']['Id'])
         return t
 
+    def get_name(self):
+        return self.name
+
     def __str__(self):
-        return "Team {name: \"%s\", id: %d, %s}" % (self.name, self.id, self.sport)
+        return "%s(%d)" % (self.name, self.id)
 
 class Match:
     def __init__(self, id = None, kickoff = None, league_id = None, team1 = None, team2 = None):
@@ -284,7 +287,7 @@ class Match:
         return self.kickoff
 
     def __str__(self):
-        return "(%d) %s - %s %s" % (self.id, self.kickoff, self.team1, self.team2)
+        return "(%d) %s vs %s %s" % (self.id, self.kickoff, self.team1, self.team2)
 
     @staticmethod
     def from_id(id):
@@ -383,10 +386,9 @@ class League:
         req = KAPI_BASE_URL + "/LeagueMatches/%d/?date=%s&bystage=%s" % (self.id, date, "true" if by_stage else "false")
         r = requests.get(req).json()
 
-        # For League matches, the resulting json is structured as follows
+        # For League matches, the resulting json is structured as follows:
         # every elemnent of the 'root' list consists of a 'day' date regrouping
-        # all the matches played/due to play that day.
-        # The list of matches is stored in elt['Stages']['Matches']
+        # all the matches played/due to be played that day.
         res = []
         for elt in r:
             for stage in elt['Stages']:
@@ -394,6 +396,11 @@ class League:
                     m = Match.from_json_search(match)
                     res.append(m)
         return res
+
+    def get_next_matches(self):
+        # TODO : use get_matches and keep 'future' matches only
+        return []
+
 
     def get_table(self):
         req = KAPI_BASE_URL + "/LeagueTable/%d" % self.id
@@ -404,7 +411,7 @@ class League:
             res.append(elt)
         return res
 
-     def get_top_scorers(self):
+    def get_top_scorers(self):
         req = KAPI_BASE_URL + "/scorers/%d" % self.id
         r = requests.get(req).json()
 

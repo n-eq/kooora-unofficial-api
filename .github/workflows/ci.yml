@@ -21,5 +21,5 @@ jobs:
         pip install -r requirements.txt
     - name: Pytest
       run: |
-        pip install pytest3
+        apt-get install python3-logilab-common
         for f in tests/test_*.py; do pytest3 -v "$f"; done

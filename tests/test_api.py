@@ -1,8 +1,10 @@
 import unittest
 import sys, os
 
-DATA_DIR = os.path.dirname(os.path.abspath(__file__)) + "/kooora"
+DATA_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.abspath(os.path.dirname(DATA_DIR)))
+
+print("path: ", sys.path)
 
 from kooora.kooora import Kooora, Team, Player, League
 

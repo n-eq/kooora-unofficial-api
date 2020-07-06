@@ -21,5 +21,4 @@ jobs:
         pip install -r requirements.txt
     - name: Pytest
       run: |
-          pip install pytest
-          pytest -v tests/test_*.py
+        echo "path: $PATH"

@@ -4,7 +4,7 @@ import sys, os
 DATA_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.abspath(os.path.dirname(DATA_DIR)))
 
-from kooora import Kooora, League
+from kooora.kooora import Kooora, League
 
 class TestLeague(unittest.TestCase):
     def test_parsing_from_id(self):

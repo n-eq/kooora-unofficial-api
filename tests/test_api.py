@@ -1,10 +1,10 @@
 import unittest
 import sys, os
 
-DATA_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.dirname(os.path.abspath(__file__)) + "/kooora"
 sys.path.insert(0, os.path.abspath(os.path.dirname(DATA_DIR)))
 
-from kooora import Kooora, Team, Player, League
+from kooora.kooora import Kooora, Team, Player, League
 
 class TestAPISearch(unittest.TestCase):
     def setUp(self):

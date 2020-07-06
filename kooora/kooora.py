@@ -3,7 +3,7 @@ from enum import Enum
 import requests
 from datetime import datetime
 
-from utils import get_tz, KAPI_BASE_URL
+from .utils import get_tz, KAPI_BASE_URL
 
 class SearchType(Enum):
     TOURNAMENT = 0

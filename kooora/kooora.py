@@ -143,7 +143,6 @@ class Player:
         return Player(j['Id'], j['Flags'], j['Name'], j['Nationality']['Value'], 
                    0, -1, j['Number'], j['NationalNumber'])
 
-
     def __str__(self):
         return "[%d] %s" % (self.id, self.name)
 
@@ -165,19 +164,14 @@ class Team:
         self.sport = Sport(sport_id)
         self.players = players
 
-    def to_dict(self):
-        d = {
-            'id': self.id,
-            'name': self.name,
-            'country': self.country or "",
-            'sport': self.sport.to_dict()
-        }
-        d['players'] = [p.to_dict() for p in self.players]
-
-        return d
-
     def get_players(self):
         return self.players
+
+    def get_id(self):
+        return self.id
+
+    def get_name(self):
+        return self.name
 
     def set_players(self, l):
         self.players = l
@@ -221,9 +215,6 @@ class Team:
     def get_news(self):
         return requests.get(KAPI_BASE_URL + "/teamNews?id=%s" % str(self.id)).json()
 
-    def get_id(self):
-        return self.id
-
     @staticmethod
     def from_id(id):
         res = requests.get(KAPI_BASE_URL + "/teams?id=%s" % str(id))
@@ -265,8 +256,16 @@ class Team:
         t = Team(j['Id'], j['Name'], j['Country']['Value'], j['Sport']['Id'])
         return t
 
-    def get_name(self):
-        return self.name
+    def to_dict(self):
+        d = {
+            'id': self.id,
+            'name': self.name,
+            'country': self.country or "",
+            'sport': self.sport.to_dict()
+        }
+        d['players'] = [p.to_dict() for p in self.players]
+
+        return d
 
     def __str__(self):
         return "%s(%d)" % (self.name, self.id)
@@ -282,29 +281,20 @@ class Match:
     def __init__(self):
         self.id = -1
 
-    def get_kickoff(self):
-        return self.kickoff
-
-    def __str__(self):
-        return "(%d) %s vs %s %s" % (self.id, self.kickoff, self.team1, self.team2)
-
-    @staticmethod
-    def from_id(id):
-        r = KAPI_BASE_URL + "/matches?id=%d" % id
-        res = requests.get(r).json()
-        return Match.from_json_search(res)
-
     # TODO : produce a better output
     def get_stats(self):
         req = KAPI_BASE_URL + "/matchStats?id=%s" % str(self.id)
         r = requests.get(req)
         return r.json()
 
-    def get_photos(self):
-        print("TODO")
+    def get_kickoff(self):
+        return self.kickoff
 
-    def get_album(self):
-        print("TODO")
+    @staticmethod
+    def from_id(id):
+        r = KAPI_BASE_URL + "/matches?id=%d" % id
+        res = requests.get(r).json()
+        return Match.from_json_search(res)
 
     @staticmethod
     def from_json_search(j):
@@ -335,6 +325,9 @@ class Match:
             "current_minute": self.curr_min
         }
 
+    def __str__(self):
+        return "(%d) %s vs %s %s" % (self.id, self.kickoff, self.team1, self.team2)
+
 class League:
     def __init__(self, id = None, title = '', flags = None, sport = None, years = None):
         self.id = id
@@ -345,6 +338,15 @@ class League:
 
     def __init__(self):
         self.id = -1
+
+    def get_title(self):
+        return self.title
+
+    def get_years(self):
+        return self.years
+
+    def get_sport(self):
+        return self.sport
 
     def get_teams(self):
         r = requests.get(KAPI_BASE_URL + "/teams?league=%s" % str(self.id)).json()
@@ -375,15 +377,6 @@ class League:
 
         return l
 
-    def get_title(self):
-        return self.title
-
-    def get_years(self):
-        return self.years
-
-    def get_sport(self):
-        return self.sport
-
     @staticmethod
     def from_id(id):
         r = requests.get(KAPI_BASE_URL + "/leagues?id=%d" % id).json()
@@ -408,7 +401,6 @@ class League:
     def get_next_matches(self):
         # TODO : use get_matches and keep 'future' matches only
         return []
-
 
     def get_table(self):
         req = KAPI_BASE_URL + "/LeagueTable/%d" % self.id
@@ -439,3 +431,4 @@ class League:
 
     def __str__(self):
         return "(%d) %s %d/%d" % (self.id, self.title, self.years[0], self.years[1])
+

@@ -339,6 +339,9 @@ class League:
     def __init__(self):
         self.id = -1
 
+    def get_id(self):
+        return self.id
+
     def get_title(self):
         return self.title
 

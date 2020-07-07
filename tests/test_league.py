@@ -14,6 +14,7 @@ class TestLeague(unittest.TestCase):
         self.assertEqual(l.get_sport(), 0)
 
         l = League.from_id(9406)
+        self.assertEqual(l.get_id(), 9406)
         self.assertEqual(l.get_table()[3]['Team']['Name'], 'الكوكب المراكشي')
 
 if __name__ == '__main__':

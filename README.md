@@ -1,6 +1,7 @@
 # kooora-unofficial-api
 [![License: MIT](https://img.shields.io/badge/License-MIT-red.svg)](https://opensource.org/licenses/MIT)
 [![Downloads](https://pepy.tech/badge/kooora)](https://pepy.tech/project/kooora)
+![Upload Python Package](https://github.com/marrakchino/kooora-unofficial-api/workflows/Upload%20Python%20Package/badge.svg)
 
 [Kooora](kooora.com) unofficial Python API.
 

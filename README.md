@@ -14,8 +14,29 @@ Below are some basic examples to use the library:
 ```python
 >>> from kooora import *
 >>> api = Kooora()
-
-# Find spanish Liga and fetch rankings and top scorers
+>>> # Fetch today matches
+>>> today_matches = api.get_today_matches()
+>>> print('Leagues played today:")
+>>> for league in today_matches.keys()[:4]:
+...     print(league)
+(ﺭﻮﻬﻤﺟ ﻥﻭﺪﺑ ﺐﻌﻠﺗ) ﻰﻟﻭﻷﺍ ﺔﺟﺭﺪﻟﺍ ﻲﻧﺎﺒﺳﻹﺍ ﻱﺭﻭﺪﻟﺍ
+(ﺭﻮﻬﻤﺟ ﻥﻭﺪﺑ ﺐﻌﻠﺗ) A ﺔﺟﺭﺪﻟﺍ ﻲﻟﺎﻄﻳﻹﺍ ﻱﺭﻭﺪﻟﺍ
+(ﺭﻮﻬﻤﺟ ﻥﻭﺪﺑ ﺐﻌﻠﺗ) ﺔﺜﻟﺎﺜﻟﺍ ﺔﺟﺭﺪﻟﺍ ﺔﻴﺑﻮﻨﺠﻟﺍ ﺎﻳﺭﻮﻛ ﻱﺭﻭﺩ
+ﺯﺎﺘﻤﻤﻟﺍ ﻱﺪﻨﻠﻨﻔﻟﺍ ﻱﺭﻭﺪﻟﺍ
+...
+>>> for league in today_matches.keys():
+...     print(league)
+...     for match in league:
+...         print(match)
+...
+ﻰﻟﻭﻷﺍ ﺔﺟﺭﺪﻟﺍ ﻲﻛﺮﺘﻟﺍ ﻱﺭﻭﺪﻟﺍ
+(1710516) 2020-07-11T17:00:00 vs 9323)ﺭﻮﺒﺳ ﺮﻬﻴﺸﻴﻜﺳﺃ (16647)ﺭﻮﺒﺳ ﺮﻴﺴﻴﻜﻴﻟﺎﺑ)
+(ﺭﻮﻬﻤﺟ ﻥﻭﺪﺑ ﺐﻌﻠﺗ) ﻰﻟﻭﻷﺍ ﺔﺟﺭﺪﻟﺍ ﻲﻧﺎﺒﺳﻹﺍ ﻱﺭﻭﺪﻟﺍ
+(1701509) 2020-07-11T15:00:00 vs 65)ﻮﻐﻴﻓ ﺎﺘﻠﻴﺳ (70)ﺎﻧﻮﺳﺎﺳﻭﺃ)
+(1701510) 2020-07-11T17:30:00 vs 63)ﺔﻧﻮﻠﺷﺮﺑ (78)ﺪﻴﻟﻮﻟﺍ ﺪﻠﺑ)
+(1701513) 2020-07-11T20:00:00 vs 64)ﺲﻴﺘﻴﺑ ﻝﺎﻳﺭ (62)ﺪﻳﺭﺪﻣ ﻮﻜﻴﺘﻠﺗﺃ)
+...
+>>> # Find spanish Liga and fetch rankings and top scorers
 >>> liga = League.from_id(17519) # you can also use api.search
 >>> liga_table = liga.get_table()
 >>> print("%2s %20s %2s %2s %2s %2s" % ("No", "Name", "Pts", "W", "L", "T"))
@@ -38,7 +59,7 @@ Top 3 scorers:
 كريم بنزيما, 17 goals
 جيرارد مورينو, 16 goals
 
-# Find a team by name and fetch its next match
+>>> # Find a team by name and fetch its next match
 >>> eibar = None
 >>> for t in liga.get_teams():
 ...     if t.get_name() == "إيبار":

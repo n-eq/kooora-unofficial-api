@@ -1,7 +1,8 @@
 from enum import Enum
 
+import re
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from .utils import get_tz, KAPI_BASE_URL
 
@@ -54,6 +55,44 @@ class Kooora:
 
     def search_photo(self, keyword):
         return self.search(keyword, SearchType.PHOTO)['photos']
+
+    def get_matches(self, date = None, timezone = None):
+        if date == None:
+            d = datetime.strftime(datetime.today(), "%Y-%m-%d")
+        else:
+            try:
+                d = datetime.strptime(date, "%Y-%m-%d")
+            except ValueError:
+                print("Could not parse date, expected format: '%Y-%m-%d'")
+                return []
+
+        if timezone == None:
+            tz = get_tz()
+        # Note : we make no check on the passed timezone format, it would
+        # be good if we implemented a regex check to validate the input
+
+        req = KAPI_BASE_URL + "/matches?tz=%.1f&date=%s&sport=0&byStage=True" % (tz, d)
+        r = requests.get(req).json()
+
+        res = {}
+        for elt in r:
+            league_name = elt['League']['Title']
+            res[league_name] = []
+            for stage in elt['Stages']:
+                for m in stage['Matches']:
+                    match = Match.from_json_search(m)
+                    res[league_name].append(match)
+
+        return res
+
+    # Alias function
+    def get_today_matches(self, tz = None):
+        d = datetime.strftime(datetime.today(), "%Y-%m-%d")
+        return self.get_matches(d, tz)
+
+    def get_tomorrow_matches(self, tz = None):
+        d = datetime.strftime(datetime.today() + timedelta(days=1), "%Y-%m-%d")
+        return self.get_matches(d, tz)
 
 #     def search_news(self, keyword):
 #         return self.search(keyword, [SearchType.NEWS])
@@ -391,7 +430,7 @@ class League:
         r = requests.get(req).json()
 
         # For League matches, the resulting json is structured as follows:
-        # every elemnent of the 'root' list consists of a 'day' date regrouping
+        # every element of the 'root' list consists of a 'day' date regrouping
         # all the matches played/due to be played that day.
         res = []
         for elt in r:

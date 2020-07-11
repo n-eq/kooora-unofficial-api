@@ -11,11 +11,99 @@
 
 Below are some basic examples to use the library:
 
+* Init Kooora class
 ```python
 >>> from kooora import *
 >>> api = Kooora()
+```
 
-# Find spanish Liga and fetch rankings and top scorers
+* Fetch today matches
+```python
+>>> today_matches = api.get_today_matches()
+>>> print('Leagues played today:")
+>>> for league in today_matches.keys()[:4]:
+...     print(league)
+(ﺭﻮﻬﻤﺟ ﻥﻭﺪﺑ ﺐﻌﻠﺗ) ﻰﻟﻭﻷﺍ ﺔﺟﺭﺪﻟﺍ ﻲﻧﺎﺒﺳﻹﺍ ﻱﺭﻭﺪﻟﺍ
+(ﺭﻮﻬﻤﺟ ﻥﻭﺪﺑ ﺐﻌﻠﺗ) A ﺔﺟﺭﺪﻟﺍ ﻲﻟﺎﻄﻳﻹﺍ ﻱﺭﻭﺪﻟﺍ
+(ﺭﻮﻬﻤﺟ ﻥﻭﺪﺑ ﺐﻌﻠﺗ) ﺔﺜﻟﺎﺜﻟﺍ ﺔﺟﺭﺪﻟﺍ ﺔﻴﺑﻮﻨﺠﻟﺍ ﺎﻳﺭﻮﻛ ﻱﺭﻭﺩ
+ﺯﺎﺘﻤﻤﻟﺍ ﻱﺪﻨﻠﻨﻔﻟﺍ ﻱﺭﻭﺪﻟﺍ
+...
+>>> for league in today_matches.keys():
+...     print(league)
+...     for match in league:
+...         print(match)
+...
+ﻰﻟﻭﻷﺍ ﺔﺟﺭﺪﻟﺍ ﻲﻛﺮﺘﻟﺍ ﻱﺭﻭﺪﻟﺍ
+(1710516) 2020-07-11T17:00:00 vs 9323)ﺭﻮﺒﺳ ﺮﻬﻴﺸﻴﻜﺳﺃ (16647)ﺭﻮﺒﺳ ﺮﻴﺴﻴﻜﻴﻟﺎﺑ)
+(ﺭﻮﻬﻤﺟ ﻥﻭﺪﺑ ﺐﻌﻠﺗ) ﻰﻟﻭﻷﺍ ﺔﺟﺭﺪﻟﺍ ﻲﻧﺎﺒﺳﻹﺍ ﻱﺭﻭﺪﻟﺍ
+(1701509) 2020-07-11T15:00:00 vs 65)ﻮﻐﻴﻓ ﺎﺘﻠﻴﺳ (70)ﺎﻧﻮﺳﺎﺳﻭﺃ)
+(1701510) 2020-07-11T17:30:00 vs 63)ﺔﻧﻮﻠﺷﺮﺑ (78)ﺪﻴﻟﻮﻟﺍ ﺪﻠﺑ)
+(1701513) 2020-07-11T20:00:00 vs 64)ﺲﻴﺘﻴﺑ ﻝﺎﻳﺭ (62)ﺪﻳﺭﺪﻣ ﻮﻜﻴﺘﻠﺗﺃ)
+...
+```
+
+* Pick a match and fetch some basic stats
+```python
+>>> m = api.get_yesterday_matches[17519][0]
+>>> stats = m.get_stats()
+>>> print(stats['Team1']['Name'])
+'ﺪﻴﻟﻮﻟﺍ ﺪﻠﺑ'
+>>> print(json.dumps(stats['Team1Stats'], indent=2))
+{
+  "Tackles": 8,
+  "ShirtColor": "#660099",
+  "PenaltyKicks": -1,
+  "ShotsOnGoal": 4,
+  "Interceptions": 11,
+  "Saves": 5,
+  "Fouls": 15,
+  "Catches": 4,
+  "Passes": 309,
+  "Shots": 13,
+  "Assists": -1,
+  "ShortColor": "#",
+  "Formation": "4-3-1-2",
+  "YellowCards": 2,
+  "Corners": 4,
+  "Possesion": 39,
+  "PenaltySaves": -1,
+  "Touches": 611,
+  "Blocks": 21,
+  "Offsides": -1,
+  "Crosses": 30,
+  "RedCards": -1
+}
+>>> print(stats['Team2']['Name'])
+'ﺔﻧﻮﻠﺷﺮﺑ'
+>>> print(json.dumps(stats['Team2Stats'], indent=2))
+{
+  "Tackles": 14,
+  "ShirtColor": "#FFFF00",
+  "PenaltyKicks": -1,
+  "ShotsOnGoal": 6,
+  "Interceptions": 12,
+  "Saves": 4,
+  "Fouls": 13,
+  "Catches": 2,
+  "Passes": 626,
+  "Shots": 9,
+  "Assists": 1,
+  "ShortColor": "#",
+  "Formation": "4-1-2-1-2",
+  "YellowCards": 2,
+  "Corners": 5,
+  "Possesion": 61,
+  "PenaltySaves": -1,
+  "Touches": 939,
+  "Blocks": 11,
+  "Offsides": -1,
+  "Crosses": 6,
+  "RedCards": -1
+}
+```
+
+* Init League from ID and fetch ranking and top scorers
+```python
 >>> liga = League.from_id(17519) # you can also use api.search
 >>> liga_table = liga.get_table()
 >>> print("%2s %20s %2s %2s %2s %2s" % ("No", "Name", "Pts", "W", "L", "T"))
@@ -37,8 +125,10 @@ Top 3 scorers:
 ليونيل ميسي, 22 goals
 كريم بنزيما, 17 goals
 جيرارد مورينو, 16 goals
+```
 
-# Find a team by name and fetch its next match
+* Find a team by name and get its next match
+```python
 >>> eibar = None
 >>> for t in liga.get_teams():
 ...     if t.get_name() == "إيبار":

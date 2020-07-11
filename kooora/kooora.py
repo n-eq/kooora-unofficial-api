@@ -76,18 +76,22 @@ class Kooora:
 
         res = {}
         for elt in r:
-            league_name = elt['League']['Title']
-            res[league_name] = []
+            league_id = elt['League']['Id']
+            res[league_id] = []
             for stage in elt['Stages']:
                 for m in stage['Matches']:
                     match = Match.from_json_search(m)
-                    res[league_name].append(match)
+                    res[league_id].append(match)
 
         return res
 
     # Alias function
     def get_today_matches(self, tz = None):
         d = datetime.strftime(datetime.today(), "%Y-%m-%d")
+        return self.get_matches(d, tz)
+
+    def get_yesterday_matches(self, tz = None):
+        d = datetime.strftime(datetime.today() + timedelta(days=-1), "%Y-%m-%d")
         return self.get_matches(d, tz)
 
     def get_tomorrow_matches(self, tz = None):
@@ -320,7 +324,7 @@ class Match:
     def __init__(self):
         self.id = -1
 
-    # TODO : produce a better output
+    # XXX : produce a better output?
     def get_stats(self):
         req = KAPI_BASE_URL + "/matchStats?id=%s" % str(self.id)
         r = requests.get(req)

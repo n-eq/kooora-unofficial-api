@@ -5,8 +5,22 @@
 
 [Kooora](kooora.com) unofficial Python API.
 
-## Install
+## Installation
 `pip install kooora`
+
+## Features
+* Search by keyword (leagues, teams, players)
+* Fetch matches by
+    * Date
+    * League
+    * Team
+* Fetch match info
+    * General information
+    * Stats (played matches)
+* Fetch team info
+* Fetch league info   
+    * League table
+    * Scorers
 
 ## Usage
 
@@ -24,31 +38,29 @@ Below are some basic examples to use the library:
 >>> print('Leagues played today:")
 >>> for league in today_matches.keys()[:4]:
 ...     print(league)
-(ﺭﻮﻬﻤﺟ ﻥﻭﺪﺑ ﺐﻌﻠﺗ) ﻰﻟﻭﻷﺍ ﺔﺟﺭﺪﻟﺍ ﻲﻧﺎﺒﺳﻹﺍ ﻱﺭﻭﺪﻟﺍ
-(ﺭﻮﻬﻤﺟ ﻥﻭﺪﺑ ﺐﻌﻠﺗ) A ﺔﺟﺭﺪﻟﺍ ﻲﻟﺎﻄﻳﻹﺍ ﻱﺭﻭﺪﻟﺍ
-(ﺭﻮﻬﻤﺟ ﻥﻭﺪﺑ ﺐﻌﻠﺗ) ﺔﺜﻟﺎﺜﻟﺍ ﺔﺟﺭﺪﻟﺍ ﺔﻴﺑﻮﻨﺠﻟﺍ ﺎﻳﺭﻮﻛ ﻱﺭﻭﺩ
-ﺯﺎﺘﻤﻤﻟﺍ ﻱﺪﻨﻠﻨﻔﻟﺍ ﻱﺭﻭﺪﻟﺍ
-...
+الدوري الإسباني الدرجة الأولي (تلعب بدون جمهور)
+الدوري الإيطالي الدرجة A (تلعب بدون جمهور)
+دوري كوريا الجنوبية الدرجة الثالثة (تلعب بدون جمهور)
 >>> for league in today_matches.keys():
 ...     print(league)
 ...     for match in league:
 ...         print(match)
 ...
-ﻰﻟﻭﻷﺍ ﺔﺟﺭﺪﻟﺍ ﻲﻛﺮﺘﻟﺍ ﻱﺭﻭﺪﻟﺍ
-(1710516) 2020-07-11T17:00:00 vs 9323)ﺭﻮﺒﺳ ﺮﻬﻴﺸﻴﻜﺳﺃ (16647)ﺭﻮﺒﺳ ﺮﻴﺴﻴﻜﻴﻟﺎﺑ)
-(ﺭﻮﻬﻤﺟ ﻥﻭﺪﺑ ﺐﻌﻠﺗ) ﻰﻟﻭﻷﺍ ﺔﺟﺭﺪﻟﺍ ﻲﻧﺎﺒﺳﻹﺍ ﻱﺭﻭﺪﻟﺍ
-(1701509) 2020-07-11T15:00:00 vs 65)ﻮﻐﻴﻓ ﺎﺘﻠﻴﺳ (70)ﺎﻧﻮﺳﺎﺳﻭﺃ)
-(1701510) 2020-07-11T17:30:00 vs 63)ﺔﻧﻮﻠﺷﺮﺑ (78)ﺪﻴﻟﻮﻟﺍ ﺪﻠﺑ)
-(1701513) 2020-07-11T20:00:00 vs 64)ﺲﻴﺘﻴﺑ ﻝﺎﻳﺭ (62)ﺪﻳﺭﺪﻣ ﻮﻜﻴﺘﻠﺗﺃ)
+الدوري التركي الدرجة الأولى
+(1710516) 2020-07-11T17:00:00 vs 9323)أسكيشيهر سبور (16647)باليكيسير سبور)
+الدوري الإسباني الدرجة الأولي (تلعب بدون جمهور)
+(1701509) 2020-07-11T15:00:00 vs 65)سيلتا فيغو (70)أوساسونا)
+(1701510) 2020-07-11T17:30:00 vs 63)برشلونة (78)بلد الوليد)
+(1701513) 2020-07-11T20:00:00 vs 64)ريال بيتيس (62)أتلتيكو مدريد)
 ...
 ```
 
-* Pick a match and fetch some basic stats
+* Pick a match and display some key info elements
 ```python
 >>> m = api.get_yesterday_matches[17519][0]
 >>> stats = m.get_stats()
 >>> print(stats['Team1']['Name'])
-'ﺪﻴﻟﻮﻟﺍ ﺪﻠﺑ'
+'بلد الوليد'
 >>> print(json.dumps(stats['Team1Stats'], indent=2))
 {
   "Tackles": 8,
@@ -75,7 +87,7 @@ Below are some basic examples to use the library:
   "RedCards": -1
 }
 >>> print(stats['Team2']['Name'])
-'ﺔﻧﻮﻠﺷﺮﺑ'
+'برشلونة'
 >>> print(json.dumps(stats['Team2Stats'], indent=2))
 {
   "Tackles": 14,
@@ -128,7 +140,7 @@ Top 3 scorers:
 جيرارد مورينو, 16 goals
 ```
 
-* Find a team by name and get its next match
+* Find a team by name and retrieve its next match
 ```python
 >>> eibar = None
 >>> for t in liga.get_teams():

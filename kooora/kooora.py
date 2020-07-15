@@ -15,6 +15,23 @@ class SearchType(Enum):
     VIDEO = 25
 
 class Kooora:
+    def populate_league_map(self):
+        url = KAPI_BASE_URL + "/leagues"
+        r = requests.get(url).json()
+
+        for e in r['Others']:
+            for l in e['Leagues']:
+                self.league_map[l['Id']] = l['Title']
+
+    def __init__(self):
+        # map league ID to league name
+        self.league_map = {}
+
+        self.populate_league_map()
+
+    def get_league_name(self, id):
+        return self.league_map[id]
+
     def get_feed(self):
         print("TODO")
 

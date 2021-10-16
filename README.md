@@ -6,9 +6,9 @@
 [Kooora](kooora.com) unofficial Python API.
 
 ## Installation
-`pip install kooora`
+`pip3 install kooora`
 
-## Features
+## Current features
 * Search by keyword (leagues, teams, players)
 * Fetch matches by
     * Date
@@ -22,133 +22,50 @@
     * League table
     * Scorers
 
-## Usage
+## Examples
 
 Below are some basic examples to use the library:
 
-* Init Kooora class
+### Initialize Kooora class
 ```python
->>> from kooora import *
->>> api = Kooora()
+from kooora.kooora import *
+api = Kooora()
 ```
 
-* Fetch today matches
+### Get the names of the leagues being played today
 ```python
->>> today_matches = api.get_today_matches()
->>> print('Leagues played today:")
->>> for league in today_matches.keys()[:4]:
-...     print(league)
-الدوري الإسباني الدرجة الأولي (تلعب بدون جمهور)
-الدوري الإيطالي الدرجة A (تلعب بدون جمهور)
-دوري كوريا الجنوبية الدرجة الثالثة (تلعب بدون جمهور)
->>> for league in today_matches.keys():
-...     print(league)
-...     for match in league:
-...         print(match)
-...
-الدوري التركي الدرجة الأولى
-(1710516) 2020-07-11T17:00:00 vs 9323)أسكيشيهر سبور (16647)باليكيسير سبور)
-الدوري الإسباني الدرجة الأولي (تلعب بدون جمهور)
-(1701509) 2020-07-11T15:00:00 vs 65)سيلتا فيغو (70)أوساسونا)
-(1701510) 2020-07-11T17:30:00 vs 63)برشلونة (78)بلد الوليد)
-(1701513) 2020-07-11T20:00:00 vs 64)ريال بيتيس (62)أتلتيكو مدريد)
-...
+today_matches = api.get_today_matches()
+# today_matches is a dict which keys are league ID numbers, let's extract the IDs
+today_matches_ids, = today_matches
+for id in today_matches_ids[]:
+    print(League.from_id(id).get_title())
 ```
 
-* Pick a match and display some key info elements
+### Get matches being played today in a given league (example with spanish liga)
 ```python
->>> m = api.get_yesterday_matches[17519][0]
->>> stats = m.get_stats()
->>> print(stats['Team1']['Name'])
-'بلد الوليد'
->>> print(json.dumps(stats['Team1Stats'], indent=2))
-{
-  "Tackles": 8,
-  "ShirtColor": "#660099",
-  "PenaltyKicks": -1,
-  "ShotsOnGoal": 4,
-  "Interceptions": 11,
-  "Saves": 5,
-  "Fouls": 15,
-  "Catches": 4,
-  "Passes": 309,
-  "Shots": 13,
-  "Assists": -1,
-  "ShortColor": "#",
-  "Formation": "4-3-1-2",
-  "YellowCards": 2,
-  "Corners": 4,
-  "Possesion": 39,
-  "PenaltySaves": -1,
-  "Touches": 611,
-  "Blocks": 21,
-  "Offsides": -1,
-  "Crosses": 30,
-  "RedCards": -1
-}
->>> print(stats['Team2']['Name'])
-'برشلونة'
->>> print(json.dumps(stats['Team2Stats'], indent=2))
-{
-  "Tackles": 14,
-  "ShirtColor": "#FFFF00",
-  "PenaltyKicks": -1,
-  "ShotsOnGoal": 6,
-  "Interceptions": 12,
-  "Saves": 4,
-  "Fouls": 13,
-  "Catches": 2,
-  "Passes": 626,
-  "Shots": 9,
-  "Assists": 1,
-  "ShortColor": "#",
-  "Formation": "4-1-2-1-2",
-  "YellowCards": 2,
-  "Corners": 5,
-  "Possesion": 61,
-  "PenaltySaves": -1,
-  "Touches": 939,
-  "Blocks": 11,
-  "Offsides": -1,
-  "Crosses": 6,
-  "RedCards": -1
-}
+for match in today_matches[22393]:
+    print(match)
 ```
 
-* Init League from ID and fetch ranking and top scorers
+### Fetch stats for a given match
 ```python
->>> liga = League.from_id(17519) # you can also use api.search
->>> liga_table = liga.get_table()
->>> print("%2s %20s %2s %2s %2s %2s" % ("No", "Name", "Pts", "W", "L", "T"))
->>> print("%s" % "_" * 35)
->>> for t in liga_table[:5]:
-...     print('%2d %20s %2d %2d %2d %2d' % (t['Rank'], t['Team']['Name'], t['Points'], t['Won'], t['Tied'], t['Lost']))
- No                Name Pts W  L  T
- __________________________________
- 1           ريال مدريد 77 23  8  3
- 2              برشلونة 73 22  7  5
- 3        أتلتيكو مدريد 62 16 14  4
- 4              إشبيلية 57 15 12  6
- 5              فياريال 54 16  6 12
->>> scorers = liga.get_top_scorers()
->>> print("Top 3 scorers:")
->>> for s in scorers[3:]):
-...     print("%s, %d goals" % (s['player'].get_name(), s['goals']))
-Top 3 scorers:
-ليونيل ميسي, 22 goals
-كريم بنزيما, 17 goals
-جيرارد مورينو, 16 goals
+yesterday = api.get_yesterday_matches()[22495].get_stats()
 ```
 
-* Find a team by name and retrieve its next match
+### Initialize a League variable by ID and fetch its ranking and top scorers
 ```python
->>> eibar = None
->>> for t in liga.get_teams():
-...     if t.get_name() == "إيبار":
-...         eibar = t
-...         break
->>> print("Eibar next match: %s" % eibar.next_match())
-Eibar next match : (1701493) 2020-07-06T20:00:00 vs إشبيلية(76) إيبار(935)    
+liga = League.from_id(22393) # you can also use api.search
+liga_table = liga.get_table()
+top_scorers = liga.get_top_scorers()
+```
+
+### Find a team by its name and fetch its next match
+```python
+eibar = None
+for t in liga.get_teams():
+    if t.get_name() == "إيبار":
+        eibar = t
+        break
 ```
 
 ## Contributing
@@ -163,6 +80,4 @@ API of it knocking around my head since at least 2017. The initial version of th
 unofficial API was made possible by reverse-engineering Kooora's official Android
 application both by reversing the code and by sniffing the network requests.
 
-## License
-
-* MIT
+## License: MIT

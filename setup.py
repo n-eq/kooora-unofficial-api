@@ -24,7 +24,7 @@ setuptools.setup(
         "Programming Language :: Python :: 3.10",
         "License :: OSI Approved :: MIT License",
         "Intended Audience :: Developers",
-        "Topic :: Software Development :: Utilities",
+        "Topic :: Utilities",
     ],
     python_requires='>=3.5',
 )

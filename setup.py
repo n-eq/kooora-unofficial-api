@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="kooora",
-    version="1.0",
+    version="1.1",
     author="Nabil Elqatib",
     author_email="nabilelqatib@gmail.com",
     description="An unofficial Kooora API",

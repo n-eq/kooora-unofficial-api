@@ -5,13 +5,13 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="kooora",
-    version="1.1",
+    version="1.2",
     author="Nabil Elqatib",
     author_email="nabilelqatib@gmail.com",
     description="An unofficial Kooora API",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/marrakchino/kooora-unofficial-api",
+    url="https://github.com/n-eq/kooora-unofficial-api",
     packages=setuptools.find_packages(),
     classifiers=[
         "Development Status :: 3 - Alpha",
